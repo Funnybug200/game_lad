@@ -18,7 +18,7 @@
 const int height=8;//height of the display
 const int width=5;//width of the display
 const int tick_rate=40;//tick rate " the update per second in the game "
-const float display_delay=1;
+const float display_delay=1;//use this to alter frame rate "dont use it unles you have to :| "
 
 char pins[5]={a,b,f,d,e};//all the display pins in order
 
@@ -75,8 +75,8 @@ void setup() {//all the pin set up
     digitalWrite(pins[i],0);
   }
 
-
-  xTaskCreate(
+//_____________________________________________________________________________________________________
+  xTaskCreate(//esp task manegment
   print,
   "display task",
   10000,
@@ -92,6 +92,7 @@ void setup() {//all the pin set up
   1,
   &game_task
  );
+ //_________________________________________________________________________________________________
 }  
 
 
@@ -99,46 +100,36 @@ void setup() {//all the pin set up
 
   
 
-void print(void * parametrs){
-  long  int counter;
-  for(;;){
-    Serial.print("______________________________________________________________________\n");
-    Serial.print(counter);
-    Serial.print("\n");
-
-
+void print(void * parametrs){//the print void is for showing the summ of tow arrys on screen
+  for(;;){//it runs infinitly and shows 41fps you can modefi by redusing display_delay on top 
+    
   for(int i =0;i<height;i++){
 
    for(int j=0;j<width;j++){
     digitalWrite(pins[j],!(play[i][j]||back_round[i][j]));
    }
-   vTaskDelay(display_delay/portTICK_PERIOD_MS);//Serial.print("delay 1______________________________________________\n");
+   vTaskDelay(display_delay/portTICK_PERIOD_MS);
    for(int k=0;k<width;k++){
     digitalWrite(pins[k],1);
    }
 
   digitalWrite(clock,0);
-  vTaskDelay(display_delay/portTICK_PERIOD_MS);//Serial.print("delay 2______________________________________________\n");
+  vTaskDelay(display_delay/portTICK_PERIOD_MS);
   digitalWrite(clock,1);
   
   }
-  counter++;
-  if(counter>=100000)
-    counter=0;
+  
   }
   
   }
 
 //____________________________________________________________________________________________________
 
-void game(void * parameters){
+void game(void * parameters){// this is the void that game update loop will run 1.24fops 
   for(;;){
-long long unsigned int counter2;
-for(int i=0;i<10000;i++){
-counter2++;
-counter2--;
-}
-counter2++;Serial.print("game looper//////////////////////////////////////////////////// ");Serial.print(counter2);Serial.print("\n");
+
+
+
 
 }
 }
